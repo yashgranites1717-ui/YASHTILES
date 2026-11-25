@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0f5c4c" />
+<title>यश टाईल्स अँड ग्रॅनाईट - Estimate App</title>
+<style>
+  :root{--primary:#0f5c4c;--primary-light:#e6f4f1;--bg:#f3f6f5;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#dbe3e0;--danger:#dc2626}
+  *{box-sizing:border-box;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans Devanagari',sans-serif}
+  body{margin:0;background:var(--bg);color:var(--text);padding-bottom:85px}
+  .header{background:linear-gradient(135deg,#0b4a3d,#136f5c);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+  .header-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .shop-title{font-size:18px;font-weight:700;cursor:pointer}
+  .shop-sub{font-size:12px;opacity:.85;margin-top:2px}
+  .badge-offline{background:rgba(255,255,255,.18);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px;white-space:nowrap}
+  .dot{width:7px;height:7px;background:#4ade80;border-radius:50%}
+  .warn{background:#fef3c7;color:#92400e;font-size:12px;padding:8px 12px;display:none;justify-content:space-between;gap:10px;align-items:flex-start}
+  .warn b{cursor:pointer;font-size:16px}
+  .container{max-width:600px;margin:0 auto;padding:12px}
+  .card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.03)}
+  .card-title{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}
+  input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;background:#fff;color:var(--text);outline:none}
+  input:focus,textarea:focus,select:focus{border-color:var(--primary)}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .btn{width:100%;padding:12px;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+  .btn-primary{background:var(--primary);color:#fff}
+  .btn-primary:active{opacity:.9}
+  .btn-outline{background:#fff;color:var(--primary);border:1.5px solid var(--primary)}
+  .btn-sm{padding:8px 12px;font-size:13px;width:auto}
+  .btn-danger{background:#fee2e2;color:var(--danger)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .chip{padding:7px 12px;border-radius:20px;font-size:12px;font-weight:600;background:#f1f5f9;color:#334155;border:1px solid #e2e8f0;cursor:pointer}
+  .chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .toggle-group{display:grid;grid-template-columns:1fr 1fr;background:#eef2f1;padding:3px;border-radius:10px;margin-bottom:10px}
+  .toggle-btn{padding:8px;text-align:center;font-size:13px;font-weight:700;border-radius:8px;cursor:pointer;color:var(--muted)}
+  .toggle-btn.active{background:var(--primary);color:#fff}
+  .search-wrap{position:relative;margin-bottom:10px}
+  .dropdown-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid var(--primary);border-radius:10px;max-height:240px;overflow-y:auto;z-index:40;box-shadow:0 8px 20px rgba(0,0,0,.12);display:none}
+  .dropdown-item{padding:10px 12px;border-bottom:1px solid #f1f5f9;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .dropdown-item:hover{background:var(--primary-light)}
+  .calc-summary{background:#f8faf9;border:1.5px dashed #cbd5e1;border-radius:12px;padding:10px;margin:10px 0}
+  .stat-box{text-align:center;background:#fff;padding:8px 4px;border-radius:8px;border:1px solid #e2e8f0}
+  .stat-label{font-size:11px;color:var(--muted)}
+  .stat-val{font-size:15px;font-weight:800;color:var(--primary);margin-top:2px}
+  .box-adjust{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0}
+  .stepper{display:flex;align-items:center;gap:10px}
+  .step-btn{width:40px;height:40px;border-radius:8px;border:1.5px solid var(--primary);background:#fff;color:var(--primary);font-size:20px;font-weight:700;cursor:pointer}
+  .est-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+  .est-table th{background:#f1f5f9;text-align:left;padding:8px 6px;font-size:11px;color:#475569}
+  .est-table td{padding:8px 6px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+  .sub{font-size:11px;color:var(--muted)}
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;margin-left:4px}
+  .tag-red{background:#fee2e2;color:#b91c1c}
+  .tag-amber{background:#fef3c7;color:#92400e}
+  .total-bar{background:var(--primary-light);padding:12px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-weight:800;color:var(--primary);gap:8px;flex-wrap:wrap}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;padding:8px 0;z-index:50}
+  .nav-item{text-align:center;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
+  .nav-item.active{color:var(--primary);font-weight:800}
+  .nav-icon{font-size:18px;display:block;margin-bottom:2px}
+  .section{display:none}
+  .section.active{display:block}
+  .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#0f172a;color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;max-width:90%;text-align:center}
+  .toast.show{opacity:1}
+  .only-print{display:none}
+  .rate-in{width:92px;padding:7px 8px;font-size:14px;text-align:right}
+  @media print{
+    .no-print,.bottom-nav,.header,.toast,.warn{display:none!important}
+    .only-print{display:block}
+    body{background:#fff;padding:0}
+    .card{border:none;box-shadow:none;padding:0}
+    .container{max-width:100%;padding:0}
+    .section{display:none!important}
+    #tab-estimate{display:block!important}
+    .est-table th,.est-table td{border:1px solid #999}
+  }
+</style>
+</head>
+<body>
+
+<div class="header no-print">
+  <div class="header-top">
+    <div>
+      <div class="shop-title" onclick="editShopName()"><span id="shopNameDisplay">यश टाईल्स अँड ग्रॅनाईट</span> ✏️</div>
+      <div class="shop-sub">शोरूम Estimate &amp; Calculator</div>
+    </div>
+    <div class="badge-offline"><span class="dot"></span> Offline Ready</div>
+  </div>
+</div>
+<div class="warn no-print" id="fileWarn">
+  <span>⚠️ हे app फाईल म्हणून उघडले आहे. काही फोनमध्ये अशा वेळी सेव्ह केलेला डेटा जाऊ शकतो. 'सेव्ह Bills' टॅबमधून रोज बॅकअप घ्या, किंवा app वेबसाईट लिंकवर ठेवा.</span>
+  <b onclick="this.parentNode.style.display='none'">✕</b>
+</div>
+
+<!-- TAB 1 -->
+<div id="tab-estimate" class="container section active">
+
+  <div class="card no-print">
+    <div class="card-title">१. कस्टमर माहिती (Customer Details)</div>
+    <div class="grid-2">
+      <div><label>कस्टमरचे नाव (Name)</label><input type="text" id="custName" placeholder="उदा. संतोष पाटील" oninput="onCust()" /></div>
+      <div><label>मोबाईल नंबर (ऐच्छिक)</label><input type="tel" inputmode="numeric" id="custPhone" placeholder="98XXXXXXXX" oninput="onCust()" /></div>
+    </div>
+    <div style="margin-top:8px;">
+      <label>विक्रेता / सेल्समन (Salesman)</label>
+      <input type="text" id="salesman" list="salesList" placeholder="तुमचे नाव" oninput="onCust()" autocomplete="off" />
+      <datalist id="salesList"></datalist>
+    </div>
+  </div>
+
+  <div class="card no-print">
+    <div class="card-title"><span>२. वस्तू निवडा (Add Item)</span>
+      <span style="font-size:11px;background:var(--primary-light);color:var(--primary);padding:3px 8px;border-radius:6px;">Fast Calc</span></div>
+
+    <label>ग्रुप (Group)</label>
+    <div class="chips" id="groupChips"></div>
+
+    <label>रूम / ठिकाण (Room)</label>
+    <div class="chips" id="roomChips">
+      <div class="chip active" onclick="selectRoomChip(this,'Hall')">Hall (हॉल)</div>
+      <div class="chip" onclick="selectRoomChip(this,'Kitchen')">Kitchen (किचन)</div>
+      <div class="chip" onclick="selectRoomChip(this,'Bedroom 1')">Bedroom 1</div>
+      <div class="chip" onclick="selectRoomChip(this,'Bedroom 2')">Bedroom 2</div>
+      <div class="chip" onclick="selectRoomChip(this,'Bathroom')">Bathroom</div>
+      <div class="chip" onclick="selectRoomChip(this,'Parking')">Parking</div>
+    </div>
+    <input type="text" id="roomName" value="Hall" placeholder="रूमचे नाव लिहा" style="margin-bottom:10px;" />
+
+    <div class="search-wrap">
+      <label id="searchLabel">टाईल्स शोधा (Search)</label>
+      <input type="text" id="productSearch" placeholder="नाव किंवा कोड टाईप करा..." onfocus="filterProducts()" oninput="filterProducts()" autocomplete="off" />
+      <div class="dropdown-list" id="productDropdown"></div>
+    </div>
+
+    <div id="selectedPanel" style="display:none;background:var(--primary-light);padding:10px;border-radius:10px;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:6px;" id="selLabel"></div>
+      <div class="grid-2">
+        <div><label id="lblRateA">रेट (₹)</label><input type="number" inputmode="decimal" id="rateA" placeholder="रेट टाका" oninput="onRateA()" /></div>
+        <div id="boxRateB"><label>रेट प्रति Sq.Ft (₹)</label><input type="number" inputmode="decimal" step="0.01" id="rateB" oninput="onRateB()" /></div>
+      </div>
+      <div id="boxRateRow2" class="grid-2" style="margin-top:8px;">
+        <div><label>रेट प्रति Box (₹)</label><input type="number" inputmode="decimal" step="0.01" id="rateBox" placeholder="Box रेट" oninput="onRateBox()" /></div>
+        <div><label>रेट प्रति Pic (₹)</label><input type="number" inputmode="decimal" step="0.01" id="ratePic" placeholder="Pic रेट" oninput="onRatePic()" /></div>
+      </div>
+      <div id="sqftBoxRow" class="grid-2" style="margin-top:8px;">
+        <div><label>1 Box मधील Sq.Ft</label>
+        <input type="number" inputmode="decimal" id="sqftBoxIn" placeholder="उदा. 16" oninput="onSqftBox()" /></div>
+        <div><label>1 Box मधील Pic</label>
+        <input type="number" inputmode="numeric" id="picsBoxIn" placeholder="उदा. 6" oninput="onPicsBox()" /></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:13px;gap:8px;">
+        <span id="boxRateLine"><b>1 Box रेट:</b> ₹<span id="liveBoxRate">0</span></span>
+        <button type="button" class="btn btn-outline btn-sm" style="padding:6px 10px;font-size:12px;" onclick="saveToMaster()">हा रेट लिस्टमध्ये सेव्ह करा</button>
+      </div>
+    </div>
+
+    <div id="sizeBlock">
+      <label>माप टाकण्याची पद्धत (Size Mode)</label>
+      <div class="toggle-group">
+        <div class="toggle-btn active" id="modeLxW" onclick="setSizeMode('lxw')">फूट × फूट (L × W)</div>
+        <div class="toggle-btn" id="modeDirect" onclick="setSizeMode('direct')">डायरेक्ट Sq. Ft.</div>
+      </div>
+      <div id="unitWrap">
+        <label>माप कशात आहे? (Unit)</label>
+        <div class="chips" id="unitChips"></div>
+      </div>
+      <div id="lxwInputs" class="grid-2">
+        <div><label id="lblLen">लांबी (Length - फूट)</label><input type="number" inputmode="decimal" id="roomLen" placeholder="उदा. 12" oninput="recalc(true)" /></div>
+        <div><label id="lblWid">रुंदी (Width - फूट)</label><input type="number" inputmode="decimal" id="roomWid" placeholder="उदा. 14" oninput="recalc(true)" /></div>
+      </div>
+      <div id="directInput" style="display:none;">
+        <label>एकूण क्षेत्रफळ (Total Sq. Ft.)</label>
+        <input type="number" inputmode="decimal" id="directSqft" placeholder="उदा. 168" oninput="recalc(true)" />
+      </div>
+    </div>
+
+    <div class="calc-summary">
+      <div class="grid-3">
+        <div class="stat-box"><div class="stat-label" id="l1">क्षेत्रफळ</div><div class="stat-val" id="v1">0</div></div>
+        <div class="stat-box"><div class="stat-label" id="l2">बॉक्सेस</div><div class="stat-val" id="v2">0</div></div>
+        <div class="stat-box"><div class="stat-label">रक्कम</div><div class="stat-val">₹<span id="vAmt">0</span></div></div>
+      </div>
+      <div class="box-adjust" id="stepperRow">
+        <div>
+          <div style="font-size:13px;font-weight:700;" id="stepTitle">लागणारे बॉक्सेस (Boxes)</div>
+          <div class="sub" id="stepHint">वेस्टेज / जादा बॉक्ससाठी + दाबा</div>
+        </div>
+        <div class="stepper">
+          <button type="button" class="step-btn" onclick="adjustQty(-1)">−</button>
+          <span id="qtyDisplay" style="font-size:18px;font-weight:800;min-width:28px;text-align:center;">0</span>
+          <button type="button" class="step-btn" onclick="adjustQty(1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="addItem()">+ यादीत जोडा (Add Item)</button>
+  </div>
+
+  <div class="card" id="estimateSlipCard">
+    <div class="card-title no-print"><span>३. Estimate फॉरमॅट (Bill Slip)</span><span id="roomCountBadge" style="font-size:12px;color:var(--primary);">0 Items</span></div>
+    <div class="only-print" style="text-align:center;font-size:20px;font-weight:800;margin-bottom:6px;">ESTIMATE</div>
+
+    <div style="font-size:13px;background:#f8fafc;padding:8px;border-radius:8px;margin-bottom:8px;">
+      <div><b>दुकान (Shop):</b> <span class="slip-shop"></span></div>
+      <div><b>कस्टमर:</b> <span id="slipCust">---</span> &nbsp;|&nbsp; <b>तारीख:</b> <span id="slipDate"></span></div>
+      <div><b>विक्रेता:</b> <span id="slipSales">---</span></div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="est-table">
+        <thead><tr><th>रूम / साईज</th><th>वस्तू &amp; रेट</th><th>Qty</th><th>रक्कम</th><th class="no-print"></th></tr></thead>
+        <tbody id="estimateTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="total-bar">
+      <span id="totBoxesWrap">एकूण Boxes: <span id="grandTotalBoxes">0</span></span>
+      <span>एकूण रक्कम: ₹<span id="grandTotalAmount">0</span></span>
+    </div>
+
+    <div class="grid-2 no-print" style="margin-top:10px;">
+      <button type="button" class="btn btn-primary" onclick="saveEstimateBill()">💾 Estimate सेव्ह करा</button>
+      <button type="button" class="btn btn-outline" onclick="copyEstimateWhatsApp()">📲 WhatsApp कॉपी</button>
+    </div>
+    <div class="grid-2 no-print" style="margin-top:8px;">
+      <button type="button" class="btn btn-outline btn-sm" style="width:100%;" onclick="printBill()">🖨️ Print / PDF</button>
+      <button type="button" class="btn btn-outline btn-sm" style="width:100%;" onclick="shareBillImage()">🖼️ Bill फोटो / शेअर</button>
+    </div>
+    <div class="no-print" style="margin-top:8px;">
+      <button type="button" class="btn btn-danger btn-sm" style="width:100%;" onclick="clearCurrentEstimate()">नवीन कस्टमर (Clear)</button>
+    </div>
+    <div class="sub no-print" style="margin-top:6px;">Print चालले नाही तर "Bill फोटो / शेअर" दाबा — फोटो तयार होऊन WhatsApp/Gallery मध्ये शेअर होतो.</div>
+  </div>
+</div>
+
+<!-- TAB 2 -->
+<div id="tab-saved" class="container section">
+  <div class="card">
+    <div class="card-title">सेव्ह केलेले Estimates (Saved Bills)</div>
+    <div class="grid-2" style="margin-bottom:8px;">
+      <div><label>तारीख (Date)</label><input type="date" id="billDate" onchange="onBillDate()" /></div>
+      <div><label>कस्टमर शोधा</label><input type="text" id="billSearch" placeholder="नाव / मोबाईल" oninput="renderSavedBills()" /></div>
+    </div>
+    <div class="chips">
+      <div class="chip" id="chipToday" onclick="showToday()">आज</div>
+      <div class="chip" id="chipAll" onclick="showAllBills()">सर्व (All)</div>
+    </div>
+    <div class="total-bar" style="margin-top:0;margin-bottom:10px;">
+      <span id="billsCount">0 Estimates</span><span>एकूण: ₹<span id="billsSum">0</span></span>
+    </div>
+    <div class="grid-2" style="margin-bottom:10px;">
+      <button type="button" class="btn btn-primary btn-sm" style="width:100%;" onclick="exportCSV()">📊 Excel (CSV) फाईल</button>
+      <button type="button" class="btn btn-outline btn-sm" style="width:100%;" onclick="copyDaySummary()">📲 सारांश कॉपी</button>
+    </div>
+    <div id="savedBillsList"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💾 बॅकअप (Backup)</div>
+    <p class="sub" style="margin:0 0 10px 0;font-size:12px;">सर्व रेट लिस्ट + सर्व Estimates एका फाईलमध्ये. रोज किंवा आठवड्याला एकदा घ्या.</p>
+    <div class="grid-2">
+      <button type="button" class="btn btn-primary btn-sm" style="width:100%;" onclick="backupAll()">⬇️ बॅकअप घ्या</button>
+      <button type="button" class="btn btn-outline btn-sm" style="width:100%;" onclick="document.getElementById('restoreFile').click()">⬆️ रिस्टोअर करा</button>
+    </div>
+    <input type="file" id="restoreFile" accept=".json,application/json" style="display:none;" onchange="restoreAll(this)" />
+  </div>
+</div>
+
+<!-- TAB 3 -->
+<div id="tab-rates" class="container section">
+  <div class="card" style="background:#ecfdf5;border-color:#a7f3d0;">
+    <div class="card-title" style="color:#065f46;">📲 सेल्समनला रेट लिस्ट पाठवा</div>
+    <p style="font-size:12px;color:#047857;margin:0 0 10px 0;">
+      तुम्ही प्रोडक्ट/रेट बदलल्यावर "WhatsApp वर पाठवा" दाबा आणि सेल्समनच्या ग्रुपमध्ये पाठवा. सेल्समन तो मेसेज कॉपी करून खाली "नवीन लिस्ट लोड करा" मध्ये पेस्ट करतात. सर्वांच्या फोनवर लिस्ट सारखी होते. (इंटरनेट/सर्व्हर नको)
+    </p>
+    <div class="grid-2">
+      <button type="button" class="btn btn-primary btn-sm" style="width:100%;" onclick="exportRates('share')">📤 WhatsApp वर पाठवा</button>
+      <button type="button" class="btn btn-outline btn-sm" style="width:100%;background:#fff;" onclick="exportRates('copy')">📋 कोड कॉपी</button>
+    </div>
+    <button type="button" class="btn btn-outline btn-sm" style="width:100%;margin-top:8px;background:#fff;" onclick="toggleImportBox()">📥 नवीन लिस्ट लोड करा (सेल्समनसाठी)</button>
+    <div id="importBoxArea" style="display:none;margin-top:10px;">
+      <label>WhatsApp वरून कॉपी केलेला मेसेज येथे पेस्ट करा:</label>
+      <textarea id="importCodeInput" rows="4" placeholder="येथे पेस्ट करा..."></textarea>
+      <button type="button" class="btn btn-primary btn-sm" style="width:100%;margin-top:6px;" onclick="importRatesCode()">✅ लिस्ट अपडेट करा</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">नवीन प्रोडक्ट अ‍ॅड / अपडेट करा</div>
+    <div style="margin-bottom:8px;">
+      <label>ग्रुप (Group)</label>
+      <select id="prodGroup" onchange="onGroupForm()"></select>
+    </div>
+    <div style="margin-bottom:8px;">
+      <label>नाव / कोड (Name)</label>
+      <input type="text" id="prodName" placeholder="उदा. S_50152 Marble 2x4" />
+    </div>
+    <div class="grid-2" style="margin-bottom:8px;">
+      <div id="prodSqftWrap"><label>1 Box मधील Sq. Ft.</label><input type="number" inputmode="decimal" id="prodSqftPerBox" placeholder="उदा. 16" /></div>
+      <div><label id="prodRateLabel">100 Sq. Ft. चा रेट (₹)</label><input type="number" inputmode="decimal" id="prodRate" placeholder="उदा. 4000" /></div>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="addOrUpdateProduct()">+ प्रोडक्ट सेव्ह करा</button>
+    <div class="sub" style="margin-top:6px;">तेच नाव पुन्हा टाकल्यास जुना रेट अपडेट होईल.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">सध्याची रेट लिस्ट (<span id="prodCount">0</span>)</div>
+    <div class="chips" id="masterChips"></div>
+    <input type="text" id="masterSearch" placeholder="लिस्टमधून शोधा..." oninput="renderMasterList()" style="margin-bottom:8px;" />
+    <button type="button" class="btn btn-outline btn-sm" style="width:100%;margin-bottom:8px;" onclick="bulkRate()">🏷️ खाली दिसणाऱ्या सर्वांना एकच रेट लावा</button>
+    <div class="sub" style="margin-bottom:6px;">प्रत्येक ओळीतील रेट बॉक्समध्ये थेट रेट टाका.</div>
+    <div id="masterProductList"></div>
+  </div>
+</div>
+
+<div class="bottom-nav no-print">
+  <div class="nav-item active" onclick="switchTab('estimate',this)"><span class="nav-icon">🧾</span>नवीन Estimate</div>
+  <div class="nav-item" onclick="switchTab('saved',this)"><span class="nav-icon">📂</span>सेव्ह Bills</div>
+  <div class="nav-item" onclick="switchTab('rates',this)"><span class="nav-icon">🏷️</span>रेट लिस्ट</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= DATA ================= */
+var toastTimer;
+const GROUPS = {
+  tiles:       { label: 'टाईल्स (Tiles)',            short: 'टाईल्स',      kind: 'box'  },
+  granite:     { label: 'ग्रॅनाईट (Granite)',        short: 'ग्रॅनाईट',    kind: 'sqft' },
+  sanitary:    { label: 'सॅनिटरीवेअर (Sanitary Ware)', short: 'सॅनिटरी',    kind: 'pcs'  },
+  accessories: { label: 'अ‍ॅक्सेसरीज (Accessories)', short: 'अ‍ॅक्सेसरीज', kind: 'pcs'  },
+  kadappa:     { label: 'कडप्पा (Kadappa)',          short: 'कडप्पा',      kind: 'sqft' }
+};
+const RATE_LABEL = { box: 'रेट प्रति 100 Sq.Ft (₹)', sqft: 'रेट प्रति Sq.Ft (₹)', pcs: 'रेट प्रति नग (₹)' };
+const RATE_UNIT  = { box: '₹ / 100 Sq.Ft', sqft: '₹ / Sq.Ft', pcs: '₹ / नग' };
+
+/* Stock-list tiles: code|name  (rates are filled by the owner) */
+const SEED = `10025540|DIGITAL 1032KC1 12X18 (6pic)
+10025541|DIGITAL 1032L 12X18 (6pic)
+10025542|DIGITAL 1091KC1 12X18 (6pic)
+10025543|DIGITAL 1091L 12X18 (6pic)
+10025544|DIGITAL 1116KC1 12X18 (6pic)
+10025545|DIGITAL 1116L 12X18 (6pic)
+10025546|DIGITAL 1151KC1 12X18 (6pic)
+10025547|DIGITAL 1151L 12X18 (6pic)
+10025548|DIGITAL 1178KC2 12X18 (6pic)
+10025549|DIGITAL 1178L 12X18 (6pic)
+10025550|DIGITAL 1191KC2 12X18 (6pic)
+10025551|DIGITAL 1191L 12X18 (6pic)
+10025552|DIGITAL 1228KC1 12X18 (6pic)
+10025553|DIGITAL 1228L 12X18 (6pic)
+10025554|DIGITAL 125D 12X18 (6pic)
+10025555|DIGITAL 125HL 12X18 (6pic)
+10025556|DIGITAL 125L 12X18 (6pic)
+10025557|DIGITAL 126D 12X18 (6pic)
+10025558|DIGITAL 126HL 12X18 (6pic)
+10025559|DIGITAL 126L 12X18 (6pic)
+10025560|DIGITAL 15133D 12X18 (6pic)
+10025561|DIGITAL 15133HL 12X18 (6pic)
+10025562|DIGITAL 15133L 12X18 (6pic)
+10025563|DIGITAL 2009D 12X18 (6pic)
+10025564|DIGITAL 2009HL 12X18 (6pic)
+10025565|DIGITAL 2009L 12X18 (6pic)
+10025566|DIGITAL 2597D 12X18 (6pic)
+10025567|DIGITAL 2597HL1 12X18 (6pic)
+10025568|DIGITAL 2597L 12X18 (6pic)
+10025569|DIGITAL 521D 12X18 (6pic)
+10025570|DIGITAL 521HL1 12X18 (6pic)
+10025571|DIGITAL 521L 12X18 (6pic)
+10025572|DIGITAL 616D 12X18 (6pic)
+10025573|DIGITAL 616HLI 12X18 (6pic)
+10025574|DIGITAL 616L 12X18 (6pic)
+10025575|DIGITAL 681D 12X18 (6pic)
+10025576|DIGITAL 681HL1 12X18 (6pic)
+10025577|DIGITAL 681HL2 12X18 (6pic)
+10025578|DIGITAL 681L 12X18 (6pic)
+10025579|DIGITAL 706D 12X18 (6pic)
+10025580|DIGITAL 706HL 12X18 (6pic)
+10025581|DIGITAL 706L 12X18 (6pic)
+10025582|DIGITAL 9067D 12X18 (6pic)
+10025583|DIGITAL 9067HL1 12X18 (6pic)
+10025584|DIGITAL 9067L 12X18 (6pic)
+10025585|ELEVATION GLOSSY 5566 12X18 (6pic)
+10025586|ELEVATION GLOSSY 5103 12X18 (6pic)
+10025587|DIGITAL 125F 12X12 (8pic)
+10025588|DIGITAL 126F 12X12 (8pic)
+10025589|DIGITAL 15133F 12X12 (8pic)
+10025590|DIGITAL 2009F 12X12 (8pic)
+10025591|DIGITAL 2597F 12X12 (8pic)
+10025592|DIGITAL 521F 12X12 (8pic)
+10025593|DIGITAL 616F 12X12 (8pic)
+10025594|DIGITAL 681F 12X12 (8pic)
+10025595|DIGITAL 706F 12X12 (8pic)
+10025596|DIGITAL 9067F 12X12 (8pic)
+10032504|PGVT GLOSSY CIRCAL GREY 2*4 (2pic)
+10032505|PGVT GLOSSY CL ANTY SKY 2*4 (2pic)
+10032506|PGVT GLOSSY CRESTOLA NATURAL 2*4 (3pic)
+10032507|PGVT GLOSSPY EL IMPERIAL SILVER ONYX 2*4 (2pic)
+10032508|PGVT GLOSSY ONYX AQUA 2*4 (2pic)
+10032509|PGVT GLOSSY ROYAL STATURIO GOLD 2*4 (2pic)
+10032643|GLOSSY 112 2X4
+10032644|GLOSSY 126 2X4
+10032645|GLOSSY 138 2X4
+10032646|GLOSSY EL 505 2X4
+10032647|GLOSSY LEVERPOOL EDEN GOLD 2X4
+10032648|GLOSSY LEVERPOOL MIRACLE ONYX 2X4
+10032649|GLOSSY LEVERPOOL PERLA GOLD 2X4
+10032650|GLOSSY LEVERPOOL SATVARIO GOLD 2X4
+10032651|GLOSSY VT BRISA WHITE 2X4
+10032652|GLOSSY VT ICE SATURARIO 2X4
+10034501|CARVIN RIZI SILVER 2*4 (2pic)
+10034502|GLAMORE EL CREVITO NERO 2*4 (2pic)
+10034503|GLAMORE EL ODINE SKY 2*4 (2pic)
+10034510|CARVIN 25225 2*4 (2pic)
+10034511|CARVIN 25237 2*4 (2pic)
+10034512|CARVIN 25318 2*4 (2pic)
+10034513|CARVIN 30003 2*4 (2pic)
+10034514|CARVIN 30005 2*4 (2pic)
+10034515|CARVIN 30020 2*4 (2pic)
+10034516|CARVIN 30025 2*4 (2pic)
+10034517|CARVIN AIRSLATE CAROLIN 2*4 (2pic)
+10034518|CARVIN AIRSLATE HONEY 2*4 (2pic)
+10034519|CARVIN ARREZO AZUL 2*4 (2pic)
+10034520|CARVIN INSERTO DECOR 2*4 (2pic)
+10034521|CARVIN TROPICAL DECOR 2*4 (2pic)
+10035538|PGVT GLOSSY PLAIN WHITE 2X4 (2pic)
+10035539|PGVT GLOSSY STATUARIO ALCORA 2X4 (2pic)
+10035597|GLAMOUR MORBIDO NATURAL ONYX 2X4
+10035618|PGVT GLOSSY BLISS CREMA 2x4 (2pic)
+10035619|PGVT GLOSSY BREZA STATUARIO 2x4 (2pic)
+10035620|PGVT GLOSSY CLAVA ONYX WHITE 2x4 (2pic)
+10035621|PGVT GLOSSY CRISTALLO ONYX WHITE 2x4 (2pic)
+10035623|PGVT GLOSSY FLUSTER NATURAL 2x4 (2pic)
+10035625|PGVT GLOSSY LUNA LIGERO 2x4 (2pic)
+10035627|PGVT GLOSSY ORSIS ONYX WHITE 2x4 (2pic)
+10035629|PGVT GLOSSY RIO STONE BEIGE 2x4 (2pic)
+10035630|PGVT GLOSSY STATUARIO SNOW 2x4 (2pic)
+10035631|PGVT GLOSSY VISER ONYX WHITE 2x4 (2pic)
+10035632|GLAMOUR RIO MINT 2X4
+10035633|PGVT GLOSSY CREMSON BIANCO 2X4
+10035634|PGVT GLOSSY PACIFIC STATUARIO 2X4
+10036537|CARVIN OCTEV BIANCO 2X4 (2pic)
+10037526|CARVIN EL DEMO SATVARIO 2X4 (2pic)
+10037527|CARVIN EL GELICA CREMA 2X4 (2pic)
+10037528|CARVIN EL JESKO NATURAL 2X4 (2pic)
+10037529|CARVIN EL LETIN BIANCO 2X4 (2pic)
+10037530|CARVIN EL SOLENO WHITE 2X4 (2pic)
+10037531|CARVIN ENEMIKA BEIGE DECOR 2X4 (2pic)
+10037532|CARVIN FAENZA DECOR 2X4 (2pic)
+10037533|CARVIN LETIN BIANCO DECOR 2X4 (2pic)
+10037534|CARVIN MIRROR DECOR 2X4 (2pic)
+10037535|CARVIN MOSEN BEIGE 2X4 (2pic)
+10037536|CARVIN MURALES BRIKS DECOR 2X4 (2pic)
+10037616|GLAMORE COMOROS AQUA DECOR 2x4 (2pic)
+10037617|GLAMORE EL ALBORAN 2x4 (2pic)
+10037622|PGVT GLOSSY FLASCO GREEN DECOR 2x4 (2pic)
+10037624|PGVT GLOSSY IVENA DECOR 2x4 (2pic)
+10037626|PGVT GLOSSY MINTLEAF DECOR 2x4 (2pic)
+10037628|PGVT GLOSSY PIXEL AQUA 2x4 (2pic)
+10043638|GLOSSY ADLINE STATUARIO 32X64
+10043639|GLOSSY ANGELO WHITE 32X64
+10043640|GLOSSY CLASSO ONYX BIANCO 32X64
+10043642|GLOSSY OMICRON MOCHA 32X64
+10045641|GLOSSY DIORELLA FOSSIL AQUA 32X64
+10046635|CARVIN CALACATTA BELGIA 32X64
+10046636|CARVIN LAGENT GOLD 32X64
+10046637|CARVIN SATVARIO GREY 32X64
+10283598|PARKING 326 16x16 (5pic)
+10283599|PARKING 335 16x16 (5pic)
+10283600|PARKING 4329 16x16 (5pic)
+10283601|PARKING 5815 16x16 (5pic)
+10283602|PARKING 5910 16x16 (5pic)
+10283603|PARKING 5912 16x16 (5pic)
+10283604|PARKING 6009 16x16 (5pic)
+10283605|PARKING 6209 16x16 (5pic)
+10283606|PARKING 6217 16x16 (5pic)
+10305607|PARKING APLITE 100 20x20 (3pic)
+10305609|PARKING APLITE 116 D 20x20 (3pic)
+10305610|PARKING APLITE 116 L 20x20 (3pic)
+10305611|PARKING AVAR 11 20x20 (3pic)
+10305612|PARKING DUTCH 11 20x20 (3pic)
+10305613|PARKING GREEK 23 20x20 (3pic)
+10305614|PARKING GREEK 35 20x20 (3pic)
+10305615|PARKING LAGOS 15 20x20 (3pic)
+10306608|PARKING APLITE 104 20x20 (3pic)
+10420522|SATIN MATT 2188 2X2 (4pic)
+10420523|SATIN MATT 3028 2X2 (4pic)
+10420524|SATIN MATT 4020 2X2 (4pic)
+10420525|SATIN MATT 7034 2X2 (4pic)
+|GLAMORE EL ALEXA AQUA 2X4
+|GLAMORE EL ALGARIA NATURAL. 2X4
+|GLAMORE RIO CYAN 2X4
+|GLOSSY G70130 2X2
+|GLOSSY G70158 2X2
+|GLOSSY G. PLAIN WHITE 2X4
+|HD ELAVATION BORA BORA-01 12X18
+|HD ELEVATION BORA BORA-03 12X18
+|HD ELEVATION COOK ISLAND-02 12X18
+|HD ELEVATION CUBA-03 12X18
+|HD ELEVATION FIJI-07 12X18
+|HD ELEVATION FLORES ISLAND-08 12X18
+|HD ELEVATION LUZON-06 12X18
+|HD ELEVATION LUZON-12 12X18
+|HD ELEVATION MILOS ISLAND-03 12X18
+|HD ELEVATION MILOS ISLAND-07 12X18
+|HD ELEVATION PALOLEM-03 12X18
+|HD ELEVATION ROSS ISLAND-05 12X18
+|MATT 10100 2X2
+|MATT 25002 2X2
+|MATT 25046 2X2
+|NANO SERIES JET BLACK (-15MM) 32x94
+|NANO SERIES PEARL WHITE 32x94
+|NANO SERIES WALL STREET GREY 32x94
+|PGVT GLOSSY BLUETTE AQUA GOLD 2x4
+|PGVT GLOSSY BREZA DECOR 2x4
+|SUGAR S80024 2X2
+|SUGAR S80042 2X2
+|SUGAR S80095 2X2
+|SUGAR S80101 2X2
+|SUGAR S80103 2X2
+|SUGAR S80155 2X2
+|SUGAR S80162 2X2`;
+
+function buildSeed() {
+  const DEF = { '12x18': 6, '12x12': 8, '2x4': 2, '2x2': 4, '16x16': 5, '20x20': 3 };
+  return SEED.trim().split('\n').map((line, i) => {
+    const k = line.indexOf('|');
+    const code = line.slice(0, k).trim();
+    const name = line.slice(k + 1).trim();
+    let sq = 0, chk = false;
+    const ms = [...name.matchAll(/(\d+)\s*[xX*]\s*(\d+)/g)];
+    const m = ms[ms.length - 1];
+    if (m) {
+      const a = +m[1], b = +m[2];
+      const inch = Math.max(a, b) >= 10;
+      const per = inch ? (a * b) / 144 : a * b;
+      const pm = name.match(/\((\d+)\s*pic\)/i);
+      let pics = pm ? +pm[1] : 0;
+      const key = a + 'x' + b;
+      if (!pics) { pics = DEF[key] || 0; if (pics) chk = true; }
+      if (pics) { sq = Math.round(per * pics * 100) / 100; if (key === '16x16' || key === '20x20') chk = true; }
+    }
+    return { id: 1000 + i, code, name, group: 'tiles', sqftPerBox: sq, rate: 0, chk };
+  });
+}
+
+function load(key, fallback) {
+  try { const v = JSON.parse(localStorage.getItem(key)); return v == null ? fallback : v; } catch (e) { return fallback; }
+}
+function store(key, val) {
+  try { localStorage.setItem(key, typeof val === 'string' ? val : JSON.stringify(val)); return true; }
+  catch (e) { toast("⚠️ सेव्ह करता आले नाही! बॅकअप घ्या."); return false; }
+}
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmt(n) { return Math.round(+n || 0).toLocaleString('en-IN'); }
+function fr(n) { return +(+n || 0).toFixed(2); }
+function pad(n) { return String(n).padStart(2, '0'); }
+function dkey(ts) { const d = new Date(ts); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function fdate(ts) { const d = new Date(ts); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear(); }
+function ftime(ts) { const d = new Date(ts); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.innerText = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+function copyText(text, okMsg) {
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    toast(ok ? okMsg : "⚠️ कॉपी झाले नाही, पुन्हा प्रयत्न करा");
+  };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(() => toast(okMsg), fallback);
+  else fallback();
+}
+function downloadFile(name, content, mime, bom) {
+  const blob = new Blob([bom ? '﻿' + content : content], { type: mime });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+function kindOf(p) { return (GROUPS[p.group] || GROUPS.tiles).kind; }
+
+/* ---- load state ---- */
+let products = load('ytg_products_v2', null);
+if (!Array.isArray(products)) {
+  products = buildSeed();
+  const old = load('yash_tiles_products', []);   // carry over products added in the earlier version
+  if (Array.isArray(old)) old.filter(p => p && p.id > 5 && p.name && p.rate100 > 0 && p.sqftPerBox > 0)
+    .forEach(p => products.unshift({ id: p.id, code: '', name: p.name, group: 'tiles', sqftPerBox: +p.sqftPerBox, rate: +p.rate100, chk: false }));
+  store('ytg_products_v2', products);
+}
+function normalizeRoom(r) {
+  if (!r.kind) {
+    r.kind = 'box'; r.group = 'tiles'; r.name = r.tileName || r.name || '';
+    r.unit = 'Box'; r.qty = r.boxes; r.unitRate = r.boxRate;
+    r.rateText = '₹' + r.rate100 + '/100 Sq.Ft (₹' + fmt(r.boxRate) + '/Box)';
+  }
+  r.boxes = r.kind === 'box' ? r.qty : 0;
+  return r;
+}
+function normalizeBill(b) {
+  b.ts = b.ts || b.id;
+  b.salesman = b.salesman || '';
+  b.rooms = (b.rooms || []).map(normalizeRoom);
+  b.totalBoxes = b.rooms.reduce((s, r) => s + (r.kind === 'box' ? r.qty : 0), 0);
+  b.totalAmount = b.rooms.reduce((s, r) => s + r.amount, 0);
+  return b;
+}
+let savedBills = load('yash_tiles_bills', []).map(normalizeBill);
+let shopName = localStorage.getItem('yash_tiles_shop') || "यश टाईल्स अँड ग्रॅनाईट";
+
+let currentRooms = [];
+let currentBillId = null;
+let slipTs = Date.now();
+let sel = null, curRate = 0, curSqftBox = 0, curPics = 0, qty = 0;
+let activeGroup = 'tiles', masterGroup = 'all';
+let sizeMode = 'lxw';
+const UNITS = {
+  ft: { n: 'फूट (Feet)',  s: 'ft', f: 1 },
+  in: { n: 'इंच (Inch)',  s: 'in', f: 1 / 12 },
+  mm: { n: 'mm',          s: 'mm', f: 1 / 304.8 },
+  cm: { n: 'cm',          s: 'cm', f: 1 / 30.48 }
+};
+let sizeUnit = localStorage.getItem('ytg_unit');
+if (!UNITS[sizeUnit]) sizeUnit = 'ft';
+let billFilterDate = dkey(Date.now());   // '' = all
+
+/* ================= INIT ================= */
+function applyShopName() {
+  document.getElementById('shopNameDisplay').innerText = shopName;
+  document.querySelectorAll('.slip-shop').forEach(el => el.innerText = shopName);
+  document.title = shopName + " - Estimate";
+}
+function renderGroupChips(id, withAll, active, fn) {
+  let h = withAll ? `<div class="chip ${active === 'all' ? 'active' : ''}" onclick="${fn}('all')">सर्व (All)</div>` : '';
+  h += Object.keys(GROUPS).map(g => `<div class="chip ${active === g ? 'active' : ''}" onclick="${fn}('${g}')">${GROUPS[g].short}</div>`).join('');
+  document.getElementById(id).innerHTML = h;
+}
+function init() {
+  applyShopName();
+  document.getElementById('prodGroup').innerHTML = Object.keys(GROUPS).map(g => `<option value="${g}">${GROUPS[g].label}</option>`).join('');
+  renderGroupChips('groupChips', false, activeGroup, 'setActiveGroup');
+  renderGroupChips('masterChips', true, masterGroup, 'setMasterGroup');
+  document.getElementById('salesman').value = localStorage.getItem('ytg_salesman') || '';
+  refreshSalesList();
+  const d = load('ytg_draft', null);
+  if (d && Array.isArray(d.rooms)) {
+    document.getElementById('custName').value = d.cust || '';
+    document.getElementById('custPhone').value = d.phone || '';
+    if (d.salesman) document.getElementById('salesman').value = d.salesman;
+    currentRooms = d.rooms.map(normalizeRoom);
+    currentBillId = d.billId || null;
+    slipTs = d.ts || Date.now();
+  }
+  document.getElementById('billDate').value = billFilterDate;
+  onGroupForm(); renderUnits();
+  showBlocks(); recalc(true);
+  renderEstimateTable(); renderMasterList(); renderSavedBills();
+  if (location.protocol === 'file:' || location.protocol === 'content:') document.getElementById('fileWarn').style.display = 'flex';
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) document.getElementById('productDropdown').style.display = 'none';
+});
+
+function editShopName() {
+  const name = prompt("तुमच्या दुकानाचे नाव टाका:", shopName);
+  if (name && name.trim()) { shopName = name.trim(); store('yash_tiles_shop', shopName); applyShopName(); }
+}
+function switchTab(tab, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  el.classList.add('active');
+  if (tab === 'saved') renderSavedBills();
+  if (tab === 'rates') renderMasterList();
+  window.scrollTo(0, 0);
+}
+function selectRoomChip(el, name) {
+  document.querySelectorAll('#roomChips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('roomName').value = name;
+}
+
+/* ================= DRAFT (auto-save current estimate) ================= */
+function persistDraft() {
+  store('ytg_draft', {
+    cust: document.getElementById('custName').value, phone: document.getElementById('custPhone').value,
+    salesman: document.getElementById('salesman').value, rooms: currentRooms, billId: currentBillId, ts: slipTs
+  });
+}
+function onCust() {
+  const s = document.getElementById('salesman').value.trim();
+  store('ytg_salesman', s);
+  renderSlipHeader(); persistDraft();
+}
+function refreshSalesList() {
+  const names = new Set(load('ytg_salesmen', []));
+  savedBills.forEach(b => b.salesman && names.add(b.salesman));
+  document.getElementById('salesList').innerHTML = [...names].map(n => `<option value="${esc(n)}">`).join('');
+}
+
+/* ================= GROUP + SEARCH ================= */
+function currentKind() { return sel ? kindOf(sel) : GROUPS[activeGroup].kind; }
+
+function setActiveGroup(g) {
+  activeGroup = g;
+  renderGroupChips('groupChips', false, g, 'setActiveGroup');
+  if (sel && sel.group !== g) clearSelection();
+  document.getElementById('searchLabel').innerText = GROUPS[g].short + ' शोधा (Search)';
+  showBlocks(); recalc(true); filterProducts();
+}
+function clearSelection() {
+  sel = null; curRate = 0; curSqftBox = 0; qty = 0;
+  document.getElementById('selectedPanel').style.display = 'none';
+  document.getElementById('productSearch').value = '';
+}
+function filterProducts() {
+  const q = document.getElementById('productSearch').value.toLowerCase().trim();
+  const dd = document.getElementById('productDropdown');
+  const list = products.filter(p => p.group === activeGroup && (p.name.toLowerCase().includes(q) || (p.code || '').includes(q)));
+  if (!list.length) {
+    dd.innerHTML = `<div style="padding:10px;font-size:13px;color:#64748b;">काहीही सापडले नाही. 'रेट लिस्ट' मधून अ‍ॅड करा.</div>`;
+  } else {
+    dd.innerHTML = list.slice(0, 80).map(p => {
+      const k = kindOf(p);
+      const info = k === 'box' ? (p.sqftPerBox > 0 ? `1 Box = ${p.sqftPerBox} Sq.Ft | ₹${fmt(p.rate / 100 * p.sqftPerBox)}/Box` : 'Box Sq.Ft भरा') : RATE_UNIT[k];
+      const rate = p.rate > 0 ? `<div style="font-weight:800;color:var(--primary);font-size:13px;white-space:nowrap;">₹${fr(p.rate)}${k === 'box' ? '/100' : ''}</div>`
+                              : `<span class="tag tag-red">रेट भरा</span>`;
+      return `<div class="dropdown-item" onclick="selectProduct(${p.id})"><div><div style="font-weight:700;font-size:14px;">${esc(p.name)}</div><div class="sub">${info}</div></div>${rate}</div>`;
+    }).join('') + (list.length > 80 ? `<div class="sub" style="padding:8px;text-align:center;">अजून ${list.length - 80} आहेत — शोध अरुंद करा</div>` : '');
+  }
+  dd.style.display = 'block';
+}
+function selectProduct(id) {
+  sel = products.find(p => p.id === id);
+  if (!sel) return;
+  document.getElementById('productSearch').value = sel.name;
+  document.getElementById('productDropdown').style.display = 'none';
+  curRate = sel.rate || 0; curSqftBox = sel.sqftPerBox || 0; curPics = picsOf(sel);
+  document.getElementById('selLabel').innerText = sel.name;
+  buildPanel(); showBlocks();
+  qty = currentKind() === 'pcs' ? 1 : 0;
+  recalc(true);
+}
+function buildPanel() {
+  const k = kindOf(sel);
+  document.getElementById('selectedPanel').style.display = 'block';
+  document.getElementById('lblRateA').innerText = RATE_LABEL[k];
+  document.getElementById('rateA').value = curRate > 0 ? curRate : '';
+  document.getElementById('boxRateB').style.display = k === 'box' ? 'block' : 'none';
+  document.getElementById('sqftBoxRow').style.display = k === 'box' ? 'block' : 'none';
+  document.getElementById('boxRateLine').style.display = k === 'box' ? 'inline' : 'none';
+  document.getElementById('boxRateRow2').style.display = k === 'box' ? 'grid' : 'none';
+  document.getElementById('sqftBoxIn').value = curSqftBox > 0 ? curSqftBox : '';
+  document.getElementById('picsBoxIn').value = curPics > 0 ? curPics : '';
+  syncRates('');
+}
+function picsOf(p) {
+  if (p.pics > 0) return p.pics;
+  const pm = p.name.match(/\((\d+)\s*pic\)/i);
+  if (pm) return +pm[1];
+  const DEF = { '12x18': 6, '12x12': 8, '2x4': 2, '2x2': 4, '16x16': 5, '20x20': 3 };
+  const ms = [...p.name.matchAll(/(\d+)\s*[xX*]\s*(\d+)/g)];
+  const m = ms[ms.length - 1];
+  return m ? (DEF[(+m[1]) + 'x' + (+m[2])] || 0) : 0;
+}
+/* curRate (per 100 Sq.Ft) is the master value; the other rate boxes are derived from it */
+function syncRates(skip) {
+  if (currentKind() !== 'box') return;
+  const set = (id, v) => { if (skip !== id) document.getElementById(id).value = v > 0 ? v : ''; };
+  const box = curSqftBox > 0 ? curRate / 100 * curSqftBox : 0;
+  set('rateA', curRate > 0 ? fr(curRate) : 0);
+  set('rateB', curRate > 0 ? fr(curRate / 100) : 0);
+  set('rateBox', box > 0 ? fr(box) : 0);
+  set('ratePic', box > 0 && curPics > 0 ? fr(box / curPics) : 0);
+}
+function onRateA() {
+  curRate = parseFloat(document.getElementById('rateA').value) || 0;
+  syncRates('rateA'); recalc(false);
+}
+function onRateB() {
+  const r = parseFloat(document.getElementById('rateB').value) || 0;
+  curRate = Math.round(r * 100 * 10000) / 10000;
+  syncRates('rateB'); recalc(false);
+}
+function onRateBox() {
+  const b = parseFloat(document.getElementById('rateBox').value) || 0;
+  if (b > 0 && !(curSqftBox > 0)) { toast("आधी 1 Box मधील Sq.Ft टाका"); return; }
+  curRate = curSqftBox > 0 ? Math.round(b / curSqftBox * 100 * 10000) / 10000 : 0;
+  syncRates('rateBox'); recalc(false);
+}
+function onRatePic() {
+  const p = parseFloat(document.getElementById('ratePic').value) || 0;
+  if (p > 0 && !(curSqftBox > 0 && curPics > 0)) { toast("आधी 1 Box मधील Sq.Ft आणि Pic टाका"); return; }
+  curRate = (curSqftBox > 0 && curPics > 0) ? Math.round(p * curPics / curSqftBox * 100 * 10000) / 10000 : 0;
+  syncRates('ratePic'); recalc(false);
+}
+function onSqftBox() { curSqftBox = parseFloat(document.getElementById('sqftBoxIn').value) || 0; syncRates(''); recalc(true); }
+function onPicsBox() { curPics = parseFloat(document.getElementById('picsBoxIn').value) || 0; syncRates(''); }
+
+function saveToMaster() {
+  if (!sel) return toast("आधी वस्तू निवडा");
+  sel.rate = curRate;
+  if (kindOf(sel) === 'box' && curSqftBox > 0) { sel.sqftPerBox = curSqftBox; sel.chk = false; }
+  if (kindOf(sel) === 'box' && curPics > 0) sel.pics = curPics;
+  store('ytg_products_v2', products);
+  renderMasterList();
+  toast("✅ रेट रेट-लिस्टमध्ये सेव्ह झाला");
+}
+
+/* ================= SIZE & CALC ================= */
+function setSizeMode(mode) {
+  sizeMode = mode;
+  document.getElementById('modeLxW').classList.toggle('active', mode === 'lxw');
+  document.getElementById('modeDirect').classList.toggle('active', mode === 'direct');
+  document.getElementById('lxwInputs').style.display = mode === 'lxw' ? 'grid' : 'none';
+  document.getElementById('unitWrap').style.display = mode === 'lxw' ? 'block' : 'none';
+  document.getElementById('directInput').style.display = mode === 'direct' ? 'block' : 'none';
+  recalc(true);
+}
+function renderUnits() {
+  document.getElementById('unitChips').innerHTML = Object.keys(UNITS).map(u =>
+    `<div class="chip ${u === sizeUnit ? 'active' : ''}" onclick="setUnit('${u}')">${UNITS[u].n}</div>`).join('');
+  const n = UNITS[sizeUnit].n;
+  document.getElementById('lblLen').innerText = `लांबी (Length - ${n})`;
+  document.getElementById('lblWid').innerText = `रुंदी (Width - ${n})`;
+}
+function setUnit(u) {
+  if (!UNITS[u] || u === sizeUnit) return;
+  sizeUnit = u;
+  try { localStorage.setItem('ytg_unit', u); } catch (e) {}
+  renderUnits();
+  recalc(true);
+}
+function getArea() {
+  if (sizeMode === 'lxw') {
+    const f = UNITS[sizeUnit].f;
+    return (parseFloat(document.getElementById('roomLen').value) || 0) * f * (parseFloat(document.getElementById('roomWid').value) || 0) * f;
+  }
+  return parseFloat(document.getElementById('directSqft').value) || 0;
+}
+function showBlocks() {
+  const k = currentKind();
+  document.getElementById('sizeBlock').style.display = (k === 'box' || k === 'sqft') ? 'block' : 'none';
+  document.getElementById('stepperRow').style.display = (k === 'box' || k === 'pcs') ? 'flex' : 'none';
+  document.getElementById('stepTitle').innerText = k === 'pcs' ? 'नग (Quantity)' : 'लागणारे बॉक्सेस (Boxes)';
+  document.getElementById('stepHint').innerText = k === 'pcs' ? '+ / − दाबा' : 'वेस्टेज / जादा बॉक्ससाठी + दाबा';
+}
+function boxRateNow() { return Math.round(curRate / 100 * curSqftBox); }
+
+function recalc(resetQty) {
+  const k = currentKind();
+  const area = getArea();
+  if (resetQty && k === 'box') qty = (curSqftBox > 0 && area > 0) ? Math.ceil(area / curSqftBox) : 0;
+  if (k === 'box' && sel) document.getElementById('liveBoxRate').innerText = fmt(boxRateNow());
+  updateSummary();
+}
+function lineAmount() {
+  const k = currentKind(), area = getArea();
+  if (!sel) return 0;
+  if (k === 'box') return qty * boxRateNow();
+  if (k === 'sqft') return Math.round(area * curRate);
+  return qty * curRate;
+}
+function updateSummary() {
+  const k = currentKind(), area = getArea();
+  const set = (id, t) => document.getElementById(id).innerText = t;
+  if (k === 'box')       { set('l1', 'क्षेत्रफळ'); set('v1', fr(area) + ' Sq.Ft'); set('l2', 'बॉक्सेस'); set('v2', qty + ' Box'); }
+  else if (k === 'sqft') { set('l1', 'क्षेत्रफळ'); set('v1', fr(area) + ' Sq.Ft'); set('l2', 'रेट/Sq.Ft'); set('v2', '₹' + fr(curRate)); }
+  else                   { set('l1', 'रेट/नग'); set('v1', '₹' + fr(curRate)); set('l2', 'नग'); set('v2', String(qty)); }
+  set('qtyDisplay', qty);
+  set('vAmt', fmt(lineAmount()));
+}
+function adjustQty(d) {
+  if (!sel) return toast("आधी वस्तू निवडा");
+  qty = Math.max(0, qty + d);
+  updateSummary();
+}
+
+function addItem() {
+  if (!sel) return alert("कृपया आधी वस्तू निवडा!\nSelect an item first.");
+  const k = kindOf(sel), area = getArea();
+  if (!(curRate > 0)) return alert("रेट टाका!\nEnter the rate.");
+  if (k === 'box' && !(curSqftBox > 0)) return alert("1 Box मधील Sq.Ft टाका!");
+  if (k === 'sqft' && !(area > 0)) return alert("माप (Sq.Ft) टाका!");
+  if (k !== 'sqft' && qty <= 0) return alert(k === 'box' ? "रूमची साईज किंवा बॉक्सेस टाका!" : "नग (Quantity) टाका!");
+  const rName = document.getElementById('roomName').value.trim() || "Room";
+  const areaTxt = fr(area);
+  const sizeText = k === 'pcs' ? '' : (sizeMode === 'lxw'
+    ? `${document.getElementById('roomLen').value || 0}×${document.getElementById('roomWid').value || 0} ${UNITS[sizeUnit].s} (${areaTxt} Sq.Ft)`
+    : `${areaTxt} Sq.Ft`);
+  let item;
+  if (k === 'box') {
+    const br = boxRateNow();
+    item = { unit: 'Box', qty, unitRate: br, amount: qty * br, rateText: `₹${fr(curRate)}/100 Sq.Ft (₹${fmt(br)}/Box)` };
+  } else if (k === 'sqft') {
+    item = { unit: 'Sq.Ft', qty: areaTxt, unitRate: curRate, amount: Math.round(area * curRate), rateText: `₹${fr(curRate)}/Sq.Ft` };
+  } else {
+    item = { unit: 'नग', qty, unitRate: curRate, amount: qty * curRate, rateText: `₹${fr(curRate)}/नग` };
+  }
+  currentRooms.push(normalizeRoom(Object.assign({ room: rName, group: sel.group, kind: k, name: sel.name, sizeText }, item)));
+  renderEstimateTable(); persistDraft();
+  document.getElementById('roomLen').value = '';
+  document.getElementById('roomWid').value = '';
+  document.getElementById('directSqft').value = '';
+  if (k === 'pcs') qty = 1;
+  recalc(true);
+  toast("✅ जोडले: " + sel.name);
+}
+function removeRoom(i) { currentRooms.splice(i, 1); renderEstimateTable(); persistDraft(); }
+
+/* ================= SLIP ================= */
+function qtyText(r) { return (r.kind === 'sqft' ? fr(r.qty) : r.qty) + ' ' + r.unit; }
+function renderSlipHeader() {
+  const name = document.getElementById('custName').value.trim() || "---";
+  const phone = document.getElementById('custPhone').value.trim();
+  document.getElementById('slipCust').innerText = phone ? `${name} (${phone})` : name;
+  document.getElementById('slipSales').innerText = document.getElementById('salesman').value.trim() || '---';
+  document.getElementById('slipDate').innerText = fdate(slipTs);
+}
+function totals() {
+  return {
+    boxes: currentRooms.reduce((s, r) => s + (r.kind === 'box' ? r.qty : 0), 0),
+    amount: currentRooms.reduce((s, r) => s + r.amount, 0)
+  };
+}
+function renderEstimateTable() {
+  renderSlipHeader();
+  const tbody = document.getElementById('estimateTableBody');
+  document.getElementById('roomCountBadge').innerText = currentRooms.length + " Items";
+  if (!currentRooms.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">अजून काहीही जोडलेले नाही.</td></tr>`;
+    document.getElementById('grandTotalBoxes').innerText = 0;
+    document.getElementById('grandTotalAmount').innerText = 0;
+    document.getElementById('totBoxesWrap').style.display = 'inline';
+    return;
+  }
+  tbody.innerHTML = currentRooms.map((r, i) => `<tr>
+    <td><b>${esc(r.room)}</b>${r.sizeText ? '<br><span class="sub">' + esc(r.sizeText) + '</span>' : ''}</td>
+    <td><b>${esc(r.name)}</b><br><span class="sub">${esc(r.rateText)}</span></td>
+    <td><b>${esc(qtyText(r))}</b></td>
+    <td><b>₹${fmt(r.amount)}</b></td>
+    <td class="no-print"><button onclick="removeRoom(${i})" style="border:none;background:none;color:red;font-weight:bold;font-size:16px;cursor:pointer;">✕</button></td></tr>`).join('');
+  const t = totals();
+  document.getElementById('totBoxesWrap').style.display = t.boxes > 0 ? 'inline' : 'none';
+  document.getElementById('grandTotalBoxes').innerText = t.boxes;
+  document.getElementById('grandTotalAmount').innerText = fmt(t.amount);
+}
+
+function saveEstimateBill() {
+  if (!currentRooms.length) return alert("सेव्ह करण्यासाठी किमान एक वस्तू जोडा.");
+  const t = totals();
+  const salesman = document.getElementById('salesman').value.trim();
+  const bill = {
+    id: currentBillId || Date.now(),
+    ts: currentBillId ? slipTs : Date.now(),
+    custName: document.getElementById('custName').value.trim() || "Walk-in Customer",
+    custPhone: document.getElementById('custPhone').value.trim(),
+    salesman,
+    rooms: JSON.parse(JSON.stringify(currentRooms)),
+    totalBoxes: t.boxes, totalAmount: t.amount
+  };
+  bill.date = fdate(bill.ts);
+  const i = savedBills.findIndex(b => b.id === bill.id);
+  if (i >= 0) savedBills[i] = bill; else savedBills.unshift(bill);
+  currentBillId = bill.id; slipTs = bill.ts;
+  if (salesman) { const s = new Set(load('ytg_salesmen', [])); s.add(salesman); store('ytg_salesmen', [...s]); }
+  if (store('yash_tiles_bills', savedBills)) toast(i >= 0 ? "✅ Estimate अपडेट झाले" : "✅ Estimate सेव्ह झाले");
+  refreshSalesList(); persistDraft(); renderEstimateTable();
+}
+
+function copyEstimateWhatsApp() {
+  if (!currentRooms.length) return alert("आधी वस्तू जोडा!");
+  const cust = document.getElementById('custName').value.trim() || "Customer";
+  const phone = document.getElementById('custPhone').value.trim();
+  let text = `*${shopName} - ESTIMATE*\nकस्टमर: *${cust}*${phone ? ' (' + phone + ')' : ''}\nतारीख: ${fdate(slipTs)}\n------------------\n`;
+  currentRooms.forEach((r, i) => {
+    text += `${i + 1}. *${r.room}*${r.sizeText ? ' (' + r.sizeText + ')' : ''}\n   ${r.name}\n   ${qtyText(r)} × ₹${fmt(r.unitRate)} = *₹${fmt(r.amount)}*\n\n`;
+  });
+  const t = totals();
+  text += `------------------\n`;
+  if (t.boxes > 0) text += `*एकूण Boxes:* ${t.boxes}\n`;
+  text += `*एकूण रक्कम:* ₹${fmt(t.amount)}`;
+  copyText(text, "📋 कॉपी झाले! आता WhatsApp वर Paste करा");
+}
+
+/* ---- Print / PDF (works from a clean hidden page, no app-screen dependency) ---- */
+function billHtml() {
+  const cust = document.getElementById('custName').value.trim() || '---';
+  const phone = document.getElementById('custPhone').value.trim();
+  const sales = document.getElementById('salesman').value.trim() || '---';
+  const t = totals();
+  const rows = currentRooms.map((r, i) => `<tr><td>${i + 1}</td><td><b>${esc(r.room)}</b>${r.sizeText ? '<br><small>' + esc(r.sizeText) + '</small>' : ''}</td>
+    <td><b>${esc(r.name)}</b><br><small>${esc(r.rateText)}</small></td><td>${esc(qtyText(r))}</td><td style="text-align:right">₹${fmt(r.amount)}</td></tr>`).join('');
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Estimate - ${esc(cust)}</title>
+<style>body{font-family:system-ui,'Noto Sans Devanagari',sans-serif;margin:16px;color:#000}h2,h3{text-align:center;margin:4px 0}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}th,td{border:1px solid #777;padding:6px;text-align:left;vertical-align:top}th{background:#eee}
+small{color:#444}.tot{margin-top:10px;display:flex;justify-content:space-between;font-weight:800;font-size:16px}</style></head><body>
+<h2>${esc(shopName)}</h2><h3>ESTIMATE</h3>
+<div style="font-size:14px;margin-top:8px"><b>कस्टमर:</b> ${esc(cust)}${phone ? ' (' + esc(phone) + ')' : ''} &nbsp;|&nbsp; <b>तारीख:</b> ${fdate(slipTs)}<br><b>विक्रेता:</b> ${esc(sales)}</div>
+<table><thead><tr><th>#</th><th>रूम / साईज</th><th>वस्तू &amp; रेट</th><th>Qty</th><th>रक्कम</th></tr></thead><tbody>${rows}</tbody></table>
+<div class="tot"><span>${t.boxes > 0 ? 'एकूण Boxes: ' + t.boxes : ''}</span><span>एकूण रक्कम: ₹${fmt(t.amount)}</span></div></body></html>`;
+}
+function printBill() {
+  if (!currentRooms.length) return alert("आधी वस्तू जोडा!");
+  try {
+    const old = document.getElementById('printFrame'); if (old) old.remove();
+    const f = document.createElement('iframe');
+    f.id = 'printFrame';
+    f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
+    document.body.appendChild(f);
+    const d = f.contentWindow.document;
+    d.open(); d.write(billHtml()); d.close();
+    setTimeout(() => {
+      try { f.contentWindow.focus(); f.contentWindow.print(); }
+      catch (e) { toast("Print चालले नाही — 'Bill फोटो / शेअर' वापरा"); }
+    }, 400);
+    toast("Print उघडत आहे... नाही उघडले तर 'Bill फोटो / शेअर' दाबा");
+  } catch (e) { toast("Print चालले नाही — 'Bill फोटो / शेअर' वापरा"); }
+}
+
+/* ---- Bill as photo (PNG) - works on every phone, share to WhatsApp / save ---- */
+async function shareBillImage() {
+  if (!currentRooms.length) return alert("आधी वस्तू जोडा!");
+  const FONT = "system-ui,'Noto Sans Devanagari',sans-serif", W = 900, P = 28, LW = 540;
+  const cust = document.getElementById('custName').value.trim() || '---';
+  const phone = document.getElementById('custPhone').value.trim();
+  const sales = document.getElementById('salesman').value.trim() || '---';
+  const t = totals();
+  const mc = document.createElement('canvas').getContext('2d');
+  const wrap = (txt, maxW, font) => {
+    mc.font = font;
+    const out = []; let cur = '';
+    String(txt).split(' ').forEach(w => {
+      const x = cur ? cur + ' ' + w : w;
+      if (mc.measureText(x).width > maxW && cur) { out.push(cur); cur = w; } else cur = x;
+    });
+    if (cur) out.push(cur);
+    return out;
+  };
+  const items = currentRooms.map((r, i) => {
+    const a = wrap(`${i + 1}. ${r.room} - ${r.name}`, LW, `bold 18px ${FONT}`);
+    const b = wrap([r.sizeText, r.rateText].filter(Boolean).join(' | '), LW, `15px ${FONT}`);
+    return { r, a, b, h: a.length * 25 + b.length * 21 + 16 };
+  });
+  const head = 170, H = head + 36 + items.reduce((s, x) => s + x.h, 0) + 90;
+  const c = document.createElement('canvas');
+  c.width = W * 2; c.height = H * 2;
+  const x = c.getContext('2d');
+  x.scale(2, 2);
+  x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
+  x.fillStyle = '#000'; x.textAlign = 'center'; x.textBaseline = 'alphabetic';
+  x.font = `bold 30px ${FONT}`; x.fillText(shopName, W / 2, 50);
+  x.font = `bold 22px ${FONT}`; x.fillText('ESTIMATE', W / 2, 84);
+  x.textAlign = 'left'; x.font = `17px ${FONT}`;
+  x.fillText(`कस्टमर: ${cust}${phone ? ' (' + phone + ')' : ''}`, P, 122);
+  x.fillText(`तारीख: ${fdate(slipTs)}     विक्रेता: ${sales}`, P, 148);
+  let y = head;
+  x.fillStyle = '#eee'; x.fillRect(P, y - 22, W - 2 * P, 32);
+  x.fillStyle = '#000'; x.font = `bold 15px ${FONT}`;
+  x.fillText('वस्तू / रूम', P + 6, y);
+  x.textAlign = 'right'; x.fillText('Qty', 720, y); x.fillText('रक्कम', W - P - 6, y);
+  y += 22;
+  items.forEach(it => {
+    x.textAlign = 'left'; x.fillStyle = '#000'; x.font = `bold 18px ${FONT}`;
+    let ty = y + 8; it.a.forEach(l => { ty += 25; x.fillText(l, P + 6, ty - 6); });
+    x.fillStyle = '#555'; x.font = `15px ${FONT}`;
+    it.b.forEach(l => { ty += 21; x.fillText(l, P + 6, ty - 6); });
+    x.fillStyle = '#000'; x.textAlign = 'right'; x.font = `bold 17px ${FONT}`;
+    x.fillText(qtyText(it.r), 720, y + 30);
+    x.fillText('₹' + fmt(it.r.amount), W - P - 6, y + 30);
+    y += it.h;
+    x.strokeStyle = '#bbb'; x.beginPath(); x.moveTo(P, y - 4); x.lineTo(W - P, y - 4); x.stroke();
+  });
+  y += 36;
+  x.fillStyle = '#000'; x.textAlign = 'left'; x.font = `bold 22px ${FONT}`;
+  if (t.boxes > 0) x.fillText(`एकूण Boxes: ${t.boxes}`, P + 6, y);
+  x.textAlign = 'right'; x.fillText(`एकूण रक्कम: ₹${fmt(t.amount)}`, W - P - 6, y);
+  const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+  if (!blob) return toast("फोटो तयार झाला नाही");
+  const fname = 'Estimate_' + (cust !== '---' ? cust.replace(/[^\wऀ-ॿ]+/g, '_') + '_' : '') + dkey(slipTs) + '.png';
+  const file = new File([blob], fname, { type: 'image/png' });
+  try {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Estimate' }); return; }
+  } catch (e) { if (e && e.name === 'AbortError') return; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = fname;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  toast("🖼️ Bill फोटो डाउनलोड झाला (Gallery/Downloads मध्ये पहा)");
+}
+
+function clearCurrentEstimate() {
+  if (currentRooms.length && !confirm("सध्याची यादी क्लिअर करून नवीन कस्टमर सुरू करायचा का?\n(सेव्ह न केलेले Estimate जाईल)")) return;
+  currentRooms = []; currentBillId = null; slipTs = Date.now();
+  document.getElementById('custName').value = '';
+  document.getElementById('custPhone').value = '';
+  renderEstimateTable(); persistDraft();
+}
+
+/* ================= SAVED BILLS + EXPORT ================= */
+function visibleBills() {
+  const q = document.getElementById('billSearch').value.toLowerCase().trim();
+  return savedBills.filter(b =>
+    (!billFilterDate || dkey(b.ts) === billFilterDate) &&
+    (!q || (b.custName || '').toLowerCase().includes(q) || (b.custPhone || '').includes(q)));
+}
+function onBillDate() { billFilterDate = document.getElementById('billDate').value; renderSavedBills(); }
+function showToday() { billFilterDate = dkey(Date.now()); document.getElementById('billDate').value = billFilterDate; renderSavedBills(); }
+function showAllBills() { billFilterDate = ''; document.getElementById('billDate').value = ''; renderSavedBills(); }
+
+function renderSavedBills() {
+  const list = visibleBills();
+  document.getElementById('chipToday').classList.toggle('active', billFilterDate === dkey(Date.now()));
+  document.getElementById('chipAll').classList.toggle('active', !billFilterDate);
+  document.getElementById('billsCount').innerText = list.length + " Estimates";
+  document.getElementById('billsSum').innerText = fmt(list.reduce((s, b) => s + b.totalAmount, 0));
+  const box = document.getElementById('savedBillsList');
+  if (!list.length) {
+    box.innerHTML = `<p style="text-align:center;color:var(--muted);font-size:13px;">या तारखेला कोणतेही Estimate नाही.</p>`;
+    return;
+  }
+  box.innerHTML = list.map(b => `
+    <div style="border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;font-weight:700;gap:8px;">
+        <span>${esc(b.custName)}${b.custPhone ? ' <span class="sub">' + esc(b.custPhone) + '</span>' : ''}</span>
+        <span style="color:var(--primary);white-space:nowrap;">₹${fmt(b.totalAmount)}</span>
+      </div>
+      <div class="sub" style="font-size:12px;margin:4px 0;">${fdate(b.ts)} ${ftime(b.ts)} | ${b.rooms.length} Items${b.totalBoxes ? ' | ' + b.totalBoxes + ' Boxes' : ''}${b.salesman ? ' | ' + esc(b.salesman) : ''}</div>
+      <div style="display:flex;gap:8px;margin-top:6px;">
+        <button class="btn btn-outline btn-sm" onclick="loadSavedBill(${b.id})">उघडा (Load)</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteSavedBill(${b.id})">डिलीट</button>
+      </div>
+    </div>`).join('');
+}
+function loadSavedBill(id) {
+  const b = savedBills.find(x => x.id === id);
+  if (!b) return;
+  if (currentRooms.length && currentBillId !== b.id && !confirm("सध्याची न सेव्ह केलेली यादी बदलली जाईल. सुरू ठेवायचे?")) return;
+  document.getElementById('custName').value = b.custName === "Walk-in Customer" ? '' : b.custName;
+  document.getElementById('custPhone').value = b.custPhone || '';
+  if (b.salesman) document.getElementById('salesman').value = b.salesman;
+  currentRooms = JSON.parse(JSON.stringify(b.rooms));
+  currentBillId = b.id; slipTs = b.ts;
+  renderEstimateTable(); persistDraft();
+  switchTab('estimate', document.querySelectorAll('.nav-item')[0]);
+}
+function deleteSavedBill(id) {
+  if (!confirm("हा रेकॉर्ड डिलीट करायचा का?")) return;
+  if (id === currentBillId) currentBillId = null;
+  savedBills = savedBills.filter(b => b.id !== id);
+  store('yash_tiles_bills', savedBills);
+  renderSavedBills();
+}
+
+function csvCell(v) { v = String(v == null ? '' : v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+function exportCSV() {
+  const list = visibleBills();
+  if (!list.length) return alert("एक्स्पोर्ट करण्यासाठी Estimate नाहीत.");
+  const rows = [['Date','Time','Salesman','Customer','Mobile','Room','Group','Item','Size','Rate','Qty','Unit','Amount','Bill Total']];
+  list.slice().reverse().forEach(b => b.rooms.forEach((r, i) => rows.push([
+    fdate(b.ts), ftime(b.ts), b.salesman, b.custName, b.custPhone, r.room, (GROUPS[r.group] || GROUPS.tiles).short,
+    r.name, r.sizeText, r.rateText, r.kind === 'sqft' ? fr(r.qty) : r.qty, r.unit, r.amount, i === 0 ? b.totalAmount : ''
+  ])));
+  const csv = rows.map(r => r.map(csvCell).join(',')).join('\r\n');
+  const label = billFilterDate || 'all';
+  downloadFile('Estimates_' + label + '.csv', csv, 'text/csv;charset=utf-8', true);
+  toast("📊 फाईल डाउनलोड झाली (Excel मध्ये उघडा)");
+}
+function copyDaySummary() {
+  const list = visibleBills();
+  if (!list.length) return alert("Estimate नाहीत.");
+  const sum = list.reduce((s, b) => s + b.totalAmount, 0);
+  let t = `*${shopName} - Estimate रिपोर्ट*\nतारीख: ${billFilterDate ? fdate(list[0].ts) : 'सर्व'}\nएकूण Estimates: ${list.length}\nएकूण रक्कम: ₹${fmt(sum)}\n------------------\n`;
+  list.slice().reverse().forEach((b, i) => {
+    t += `${i + 1}. ${b.custName}${b.custPhone ? ' (' + b.custPhone + ')' : ''} – ₹${fmt(b.totalAmount)}${b.salesman ? ' – ' + b.salesman : ''}\n`;
+  });
+  copyText(t, "📋 सारांश कॉपी झाला");
+}
+
+/* ---- backup / restore ---- */
+function backupAll() {
+  const data = { app: 'ytg', v: 2, ts: Date.now(), shop: shopName, products, bills: savedBills };
+  downloadFile('YTG_Backup_' + dkey(Date.now()) + '.json', JSON.stringify(data), 'application/json', false);
+  toast("💾 बॅकअप फाईल डाउनलोड झाली");
+}
+function restoreAll(inp) {
+  const f = inp.files && inp.files[0];
+  if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try {
+      const d = JSON.parse(rd.result);
+      if (d.app !== 'ytg' || !Array.isArray(d.products) || !Array.isArray(d.bills)) throw 0;
+      if (!confirm(`बॅकअपमध्ये ${d.products.length} प्रोडक्ट आणि ${d.bills.length} Estimates आहेत.\nसध्याचा डेटा बदलला जाईल. सुरू ठेवायचे?`)) return;
+      products = d.products; savedBills = d.bills.map(normalizeBill);
+      if (d.shop) { shopName = d.shop; store('yash_tiles_shop', shopName); applyShopName(); }
+      store('ytg_products_v2', products); store('yash_tiles_bills', savedBills);
+      clearSelection(); refreshSalesList(); renderMasterList(); renderSavedBills();
+      toast("♻️ बॅकअप रिस्टोअर झाला");
+    } catch (e) { alert("ही बॅकअप फाईल योग्य नाही."); }
+    inp.value = '';
+  };
+  rd.readAsText(f);
+}
+
+/* ================= PRODUCT MASTER ================= */
+function onGroupForm() {
+  const g = document.getElementById('prodGroup').value || 'tiles';
+  const k = GROUPS[g].kind;
+  document.getElementById('prodSqftWrap').style.display = k === 'box' ? 'block' : 'none';
+  document.getElementById('prodRateLabel').innerText = RATE_LABEL[k];
+}
+function addOrUpdateProduct() {
+  const group = document.getElementById('prodGroup').value;
+  const k = GROUPS[group].kind;
+  const name = document.getElementById('prodName').value.trim();
+  const sqft = parseFloat(document.getElementById('prodSqftPerBox').value) || 0;
+  const rate = parseFloat(document.getElementById('prodRate').value) || 0;
+  if (!name || !(rate > 0) || (k === 'box' && !(sqft > 0))) return alert("कृपया सर्व माहिती अचूक भरा!\nFill all fields correctly.");
+  const ex = products.find(p => p.group === group && p.name.toLowerCase() === name.toLowerCase());
+  if (ex) { ex.rate = rate; if (k === 'box') { ex.sqftPerBox = sqft; ex.chk = false; } }
+  else products.unshift({ id: Date.now(), code: '', name, group, sqftPerBox: k === 'box' ? sqft : 0, rate, chk: false });
+  store('ytg_products_v2', products);
+  document.getElementById('prodName').value = '';
+  document.getElementById('prodRate').value = '';
+  document.getElementById('prodSqftPerBox').value = '';
+  masterGroup = group; renderGroupChips('masterChips', true, masterGroup, 'setMasterGroup');
+  document.getElementById('masterSearch').value = '';
+  renderMasterList();
+  toast(ex ? "✅ रेट अपडेट झाला" : "✅ प्रोडक्ट सेव्ह झाले");
+}
+function editProduct(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('prodGroup').value = p.group; onGroupForm();
+  document.getElementById('prodName').value = p.name;
+  document.getElementById('prodSqftPerBox').value = p.sqftPerBox || '';
+  document.getElementById('prodRate').value = p.rate || '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  toast("बदल करून 'प्रोडक्ट सेव्ह करा' दाबा");
+}
+function deleteProduct(id) {
+  if (!confirm("हा प्रोडक्ट काढून टाकायचा का?")) return;
+  products = products.filter(p => p.id !== id);
+  if (sel && sel.id === id) { clearSelection(); showBlocks(); recalc(true); }
+  store('ytg_products_v2', products);
+  renderMasterList();
+}
+function setMasterGroup(g) {
+  masterGroup = g; renderGroupChips('masterChips', true, g, 'setMasterGroup'); renderMasterList();
+}
+function masterFiltered() {
+  const q = (document.getElementById('masterSearch').value || '').toLowerCase().trim();
+  return products.filter(p => (masterGroup === 'all' || p.group === masterGroup) && (!q || p.name.toLowerCase().includes(q) || (p.code || '').includes(q)));
+}
+function quickRate(id, v) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  p.rate = Math.max(0, parseFloat(v) || 0);
+  store('ytg_products_v2', products);
+  const el = document.getElementById('br' + id);
+  if (el && kindOf(p) === 'box') el.innerText = p.sqftPerBox > 0 ? '₹' + fmt(p.rate / 100 * p.sqftPerBox) + '/Box' : '';
+  if (sel && sel.id === id) { curRate = p.rate; buildPanel(); recalc(false); }
+}
+function bulkRate() {
+  const list = masterFiltered();
+  if (!list.length) return alert("लिस्ट रिकामी आहे.");
+  const v = prompt(`खाली दिसणाऱ्या ${list.length} प्रोडक्ट्सना एकच रेट (₹) लावायचा आहे.\nरेट टाका:`);
+  const r = parseFloat(v);
+  if (!(r > 0)) return;
+  if (!confirm(`${list.length} प्रोडक्ट्सचा रेट ₹${r} करायचा?`)) return;
+  list.forEach(p => p.rate = r);
+  store('ytg_products_v2', products);
+  renderMasterList();
+  toast(`✅ ${list.length} प्रोडक्ट्सचा रेट अपडेट झाला`);
+}
+function renderMasterList() {
+  const list = masterFiltered();
+  document.getElementById('prodCount').innerText = products.length;
+  document.getElementById('masterProductList').innerHTML = list.length ? list.map(p => {
+    const k = kindOf(p);
+    let info = '', tags = '';
+    if (k === 'box') {
+      info = p.sqftPerBox > 0 ? `1 Box = ${p.sqftPerBox} Sq.Ft | <span id="br${p.id}">${p.rate > 0 ? '₹' + fmt(p.rate / 100 * p.sqftPerBox) + '/Box' : ''}</span>` : '';
+      if (!(p.sqftPerBox > 0)) tags += `<span class="tag tag-red">Box Sq.Ft भरा</span>`;
+      else if (p.chk) tags += `<span class="tag tag-amber">Sq.Ft तपासा</span>`;
+    } else info = GROUPS[p.group].short;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #f1f5f9;">
+      <div style="min-width:0;flex:1;">
+        <div style="font-weight:700;font-size:14px;word-break:break-word;">${esc(p.name)}${tags}</div>
+        <div class="sub" style="font-size:12px;">${info}</div>
+      </div>
+      <div style="text-align:right;">
+        <input class="rate-in" type="number" inputmode="decimal" value="${p.rate || ''}" placeholder="${RATE_UNIT[k]}" onchange="quickRate(${p.id},this.value)" />
+      </div>
+      <div style="display:flex;gap:4px;">
+        <button onclick="editProduct(${p.id})" style="border:none;background:#e6f4f1;color:#0f5c4c;padding:8px;border-radius:8px;cursor:pointer;">✏️</button>
+        <button onclick="deleteProduct(${p.id})" style="border:none;background:#fee2e2;color:#dc2626;padding:8px;border-radius:8px;cursor:pointer;">🗑️</button>
+      </div></div>`;
+  }).join('') : `<p class="sub" style="text-align:center;">काहीही सापडले नाही.</p>`;
+}
+
+/* ================= OFFLINE SYNC (via WhatsApp) ================= */
+function toB64(str) {
+  const bytes = new TextEncoder().encode(str);
+  return bytesToB64(bytes);
+}
+function bytesToB64(bytes) {
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+function b64ToBytes(b64) { return Uint8Array.from(atob(b64), c => c.charCodeAt(0)); }
+async function gzipB64(str) {
+  const cs = new CompressionStream('gzip');
+  const w = cs.writable.getWriter();
+  w.write(new TextEncoder().encode(str)); w.close();
+  return bytesToB64(new Uint8Array(await new Response(cs.readable).arrayBuffer()));
+}
+async function gunzipB64(b64) {
+  const ds = new DecompressionStream('gzip');
+  const w = ds.writable.getWriter();
+  w.write(b64ToBytes(b64)); w.close();
+  return new TextDecoder().decode(await new Response(ds.readable).arrayBuffer());
+}
+
+async function exportRates(mode) {
+  const payload = JSON.stringify({ v: 2, shop: shopName, ts: Date.now(), products });
+  let code;
+  try { if (!window.CompressionStream) throw 0; code = 'YTG1:' + await gzipB64(payload); }
+  catch (e) { code = 'YTG0:' + toB64(payload); }
+  const msg = `*${shopName} - नवीन Rate List*\n(${products.length} प्रोडक्ट्स | ${fdate(Date.now())})\n\nहा पूर्ण मेसेज कॉपी करा → App मध्ये 'रेट लिस्ट' → 'नवीन लिस्ट लोड करा' मध्ये पेस्ट करा:\n\n${code}`;
+  if (mode === 'share' && navigator.share) {
+    try { await navigator.share({ text: msg }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  copyText(msg, "✅ कोड कॉपी झाला! WhatsApp वर Paste करून पाठवा");
+}
+function toggleImportBox() {
+  const b = document.getElementById('importBoxArea');
+  b.style.display = b.style.display === 'none' ? 'block' : 'none';
+}
+async function importRatesCode() {
+  const raw = document.getElementById('importCodeInput').value;
+  const i = raw.indexOf('YTG');
+  if (!raw.trim()) return alert("कृपया मेसेज पेस्ट करा!");
+  if (i < 0) return alert("चुकीचा कोड! WhatsApp वरील पूर्ण मेसेज कॉपी करून पेस्ट करा.");
+  const m = raw.slice(i).replace(/\s+/g, '').match(/^YTG([01]):([A-Za-z0-9+\/]+={0,2})/);
+  if (!m) return alert("कोड वाचता आला नाही. पूर्ण मेसेज कॉपी करा.");
+  try {
+    let json;
+    if (m[1] === '1') {
+      if (!window.DecompressionStream) return alert("या फोनचा Chrome जुना आहे. Chrome अपडेट करा.");
+      json = await gunzipB64(m[2]);
+    } else json = new TextDecoder().decode(b64ToBytes(m[2]));
+    const data = JSON.parse(json);
+    if (!Array.isArray(data.products) || !data.products.length) throw 0;
+    const seen = new Set();
+    const list = data.products.filter(p => p && p.name).map((p, n) => {
+      let id = +p.id || (Date.now() + n);
+      while (seen.has(id)) id++;
+      seen.add(id);
+      return { id, code: String(p.code || ''), name: String(p.name), group: GROUPS[p.group] ? p.group : 'tiles',
+               sqftPerBox: +p.sqftPerBox || 0, rate: +p.rate || 0, chk: !!p.chk, pics: +p.pics || 0 };
+    });
+    if (!list.length) throw 0;
+    if (!confirm(`${list.length} प्रोडक्ट्सची नवीन लिस्ट लोड करायची का?\nसध्याची रेट लिस्ट बदलली जाईल.`)) return;
+    products = list;
+    store('ytg_products_v2', products);
+    if (data.shop) { shopName = String(data.shop); store('yash_tiles_shop', shopName); applyShopName(); }
+    clearSelection(); showBlocks(); recalc(true);
+    renderMasterList();
+    document.getElementById('importCodeInput').value = '';
+    document.getElementById('importBoxArea').style.display = 'none';
+    toast(`🎉 ${products.length} प्रोडक्ट्सचे नवीन रेट्स अपडेट झाले`);
+  } catch (e) {
+    alert("कोड वाचता आला नाही. WhatsApp वरील मेसेज पूर्ण कॉपी करून पेस्ट करा.");
+  }
+}
+
+init();
+</script>
+</body>
+</html>

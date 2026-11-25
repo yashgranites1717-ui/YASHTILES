@@ -1,0 +1,8 @@
+{
+  "name": "Yash Tiles & Granite Estimate",
+  "description": "Showroom estimate, tile box & granite Sq.Ft calculator, saved bills, and offline WhatsApp rate list sync.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
